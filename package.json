@@ -1,0 +1,17 @@
+{
+  "name": "hexaworld",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.9.9"
+  },
+  "dependencies": {
+    "simplex-noise": "^3.0.1",
+    "three": "^0.140.2"
+  }
+}
