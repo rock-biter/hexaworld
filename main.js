@@ -14,15 +14,23 @@ import { Color } from 'three'
 import { CylinderBufferGeometry } from 'three'
 import { MeshStandardMaterial } from 'three'
 
+import dirtImage from './src/images/dirt.png'
+import dirt2Image from './src/images/dirt2.jpg'
+import stoneImage from './src/images/stone.png'
+import sandImage from './src/images/sand.jpg'
+import grassImage from './src/images/grass.jpg'
+import envmapImage from './src/images/envmap.hdr?url'
+import waterImage from './src/images/water.jpg'
+
 const scene = new THREE.Scene()
 scene.background = new THREE.Color('#FFEECC')
 
 const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, .1, 1000)
-camera.position.set(-17,31,31)
+camera.position.set(-0,31,60)
 
 // const ambientLight = new THREE.AmbientLight('#ffffff',1)
 // scene.add(ambientLight)
-const light = new PointLight( new THREE.Color('#FFCB8E').convertSRGBToLinear().convertSRGBToLinear(), 80,200)
+const light = new PointLight( new THREE.Color('#FFCB8E').convertSRGBToLinear().convertSRGBToLinear(), 80,400)
 light.position.set(10,20,10)
 
 light.castShadow = true
@@ -59,24 +67,24 @@ let envmap
 (async function() {
 
   let pmrem = new THREE.PMREMGenerator(renderer)
-  let envmapTexture = await new RGBELoader().setDataType(THREE.FloatType).loadAsync('src/images/envmap.hdr')
+  let envmapTexture = await new RGBELoader().setDataType(THREE.FloatType).loadAsync(envmapImage)
   envmap = pmrem.fromEquirectangular(envmapTexture).texture
 
 
   let textures = {
-    dirt: await new TextureLoader().loadAsync('src/images/dirt.png'),
-    dirt2: await new TextureLoader().loadAsync('src/images/dirt2.jpg'),
-    grass: await new TextureLoader().loadAsync('src/images/grass.jpg'),
-    sand: await new TextureLoader().loadAsync('src/images/sand.jpg'),
-    water: await new TextureLoader().loadAsync('src/images/water.jpg'),
-    stone: await new TextureLoader().loadAsync('src/images/stone.png'),
+    dirt: await new TextureLoader().loadAsync(dirtImage),
+    dirt2: await new TextureLoader().loadAsync(dirt2Image),
+    grass: await new TextureLoader().loadAsync(grassImage),
+    sand: await new TextureLoader().loadAsync(sandImage),
+    water: await new TextureLoader().loadAsync(waterImage),
+    stone: await new TextureLoader().loadAsync(stoneImage),
   }
 
 
-  for(let i = -10; i < 10; i++) {
-    for(let j = -10; j < 10; j++) {
+  for(let i = -100; i < 100; i++) {
+    for(let j = -100; j < 100; j++) {
       const position = tileToPosition(i,j)
-      if(position.length() > 15)
+      if(position.length() > 45)
         continue
       
         let noise = (simplex.noise2D(i*0.1, j*0.1) + 1) * 0.5
@@ -113,7 +121,7 @@ let envmap
 
   
   let seaMesh = new Mesh(
-    new CylinderBufferGeometry(17,17, MAX_HEIGHT * 0.2, 50),
+    new CylinderBufferGeometry(50,50, MAX_HEIGHT * 0.2, 50),
     new MeshPhysicalMaterial({
       envMap: envmap,
       color: new Color('#55aaff').convertSRGBToLinear().multiplyScalar(3),
@@ -265,7 +273,7 @@ function tree(height,position) {
 
 function clouds() {
   let geo = new THREE.SphereBufferGeometry(0,0,0)
-  let count = Math.floor( Math.pow(Math.random(),0.45)*4)
+  let count = Math.floor( Math.pow(Math.random(),0.45)*10 + 10)
 
 
   for(let i = 0; i < count; i++) {
@@ -279,9 +287,9 @@ function clouds() {
 
     const cloudGeo = mergeBufferGeometries([puff1,puff2,puff3])
     cloudGeo.translate(
-      Math.random() * 20 - 10,
-      Math.random() * 7 + 7,
-      Math.random() * 20 - 10,
+      Math.random() * 70 - 35,
+      Math.random() * 8 + 8,
+      Math.random() * 70 - 35,
     )
 
     cloudGeo.rotateY(Math.random() * Math.PI * 2)
