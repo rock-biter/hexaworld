@@ -42,6 +42,7 @@ scene.add(light)
 
 const renderer = new THREE.WebGLRenderer({ antialias: devicePixelRatio <= 1 })
 renderer.setSize(innerWidth,innerHeight)
+renderer.setPixelRatio(devicePixelRatio)
 renderer.toneMapping = THREE.ACESFilmicToneMapping
 renderer.outputEncoding = THREE.sRGBEncoding
 renderer.physicallyCorrectLights = true
